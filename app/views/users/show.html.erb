@@ -2,11 +2,11 @@
 
 <dl>
   <dt>Private</dt>
-  <dd>false</dd>
+  <dd><%=@the_user.private%></dd>
 
   <dt>Followers</dt>
   <dd>
-    32
+    <%= @the_user.followers.count %>
 
     <div>
       <!--<a href="/delete_follow_request/1968">Unfollow</a>-->
@@ -15,14 +15,14 @@
   </dd>
 
   <dt>Following</dt>
-  <dd>10</dd>
+  <dd> <%= @the_user.following.count %></dd>
 </dl>
 
 <hr>
 
 <ul>
   <li>
-    <a href="/users/catherina">Profile</a>
+    <a href="/users/<%= @the_user.username %>">Profile</a>
   </li>
   <li>
     <a href="/users/catherina/liked_photos">Liked photos</a>
@@ -37,7 +37,7 @@
 
 <hr>
 
-<h2>Own photos (<%= @the_user.own_photos_count %>)</h2>
+<h2>Own photos (<%= @the_user.own_photos.count %>)</h2>
 
 <table border="1">
   <tr>
@@ -64,9 +64,14 @@
     <th></th>
   </tr>
 
+<% @the_user.own_photos.each do |own_post| %>
+  
+
+
   <tr>
     <td>
-      <img src="https://robohash.org/blanditiisrecusandaeut" class="img-responsive">
+      
+      <img src="<%= own_post.image %>" class="img-responsive">
     </td>
 
     <td>
@@ -74,21 +79,22 @@
     </td>
 
     <td>
-      Once you’ve accepted your flaws, no one can use them against you.
+      <%= own_post.caption %>
     </td>
 
     <td>
-      over 4 years ago
+      <%= time_ago_in_words(own_post.created_at) %>
     </td>
 
     <td>
-      9
+      <%= own_post.likes_count %>
     </td>
 
     <td>
-      <a href="/photos/773">
+      <a href="/photos/<%=own_post.id%>">
         Show details
       </a>
     </td>
   </tr>
-
+<% end %>
+</table>
