@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_03_213740) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_03_220519) do
   create_table "comments", force: :cascade do |t|
     t.text "body"
-    t.integer "commenter_id"
+    t.integer "author_id"
     t.integer "photo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -28,7 +28,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_03_213740) do
   end
 
   create_table "likes", force: :cascade do |t|
-    t.integer "user_id"
+    t.integer "fan_id"
     t.integer "photo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -61,6 +61,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_03_213740) do
     t.integer "own_photos_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "likes_count", default: 0
+    t.integer "comments_count", default: 0
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

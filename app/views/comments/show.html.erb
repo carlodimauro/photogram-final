@@ -30,7 +30,7 @@
         Commenter
       </dt>
       <dd>
-        <%= @the_comment.commenter_id %>
+        <%= @the_comment.author_id %>
       </dd>
 
       <dt>
@@ -80,7 +80,7 @@
           Commenter
         </label>
 
-        <input type="text" id="commenter_id_box" name="query_commenter_id" value="<%= @the_comment.commenter_id %>">
+        <input type="text" id="commenter_id_box" name="query_commenter_id" value="<%= @the_comment.author_id %>">
       </div>
 
       <div>

@@ -5,8 +5,10 @@
 #  id                             :integer          not null, primary key
 #  avatar_img                     :string
 #  bio                            :string
+#  comments_count                 :integer          default(0)
 #  email                          :string           default(""), not null
 #  encrypted_password             :string           default(""), not null
+#  likes_count                    :integer          default(0)
 #  own_photos_count               :integer
 #  private                        :boolean
 #  received_follow_requests_count :integer
