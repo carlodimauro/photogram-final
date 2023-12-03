@@ -1,10 +1,39 @@
 <h1>List of Users</h1>
 
-<ul>
-
-<% @list_of_users.each do |a_user| %>
-  <li><%= a_user.username %>  </li>
-<% end %>
 
 
-</ul>
+
+ 
+
+  <table border="1">
+    <tr>
+      <th>
+        Username
+      </th>
+
+      <th>
+        Private?
+      </th>
+
+      <th></th>
+      <th></th>
+    </tr>
+  <% @list_of_users.each do |a_user| %>
+    <tr>
+      <td>
+         <%= a_user.username %> 
+      </td>
+
+      <td>
+        <%= a_user.private %> 
+      </td>
+
+      <td>
+      </td>
+
+      <td>
+        <a href="/users/<%= a_user.username %>">Show details</a>
+      </td>
+    </tr>
+ 
+  <% end %>
