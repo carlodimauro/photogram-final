@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   devise_for :users
   root "photos#index"
+  # Routes for the users resource:
+
+  get("/users", { :controller => "users", :action => "index" })
 
   # Routes for the Comment resource:
   
