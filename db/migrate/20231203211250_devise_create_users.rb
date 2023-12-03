@@ -41,6 +41,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.0]
       t.integer :received_follow_requests_count
       t.integer :own_photos_count
 
+
       t.timestamps null: false
     end
 
