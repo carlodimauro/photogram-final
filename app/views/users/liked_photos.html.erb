@@ -36,3 +36,67 @@
 </ul>
 
 <hr>
+
+
+
+<h2>Liked photos (<%= @the_user.liked_photos.count %>)</h2>
+
+<table border="1">
+  <tr>
+    <th>
+      Image
+    </th>
+
+    <th>
+      Owner
+    </th>
+
+    <th>
+      Caption
+    </th>
+
+    <th>
+      Posted
+    </th>
+
+    <th>
+      Likes
+    </th>
+
+    <th></th>
+  </tr>
+
+<% @the_user.liked_photos.each do |liked_p| %>
+  
+
+
+  <tr>
+    <td>
+      
+      <img src="<%= liked_p.image %>" class="img-responsive">
+    </td>
+
+    <td>
+      <%= liked_p.owner_id %>
+    </td>
+
+    <td>
+      <%= liked_p.caption %>
+    </td>
+
+    <td>
+      <%= time_ago_in_words(liked_p.created_at) %>
+    </td>
+
+    <td>
+      <%= liked_p.likes_count %>
+    </td>
+
+    <td>
+      <a href="/photos/<%=liked_p.id%>">
+        Show details
+      </a>
+    </td>
+  </tr>
+<% end %>
+</table>
