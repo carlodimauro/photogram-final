@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
-  root "photos#index"
+  root "users#index"
   # Routes for the users resource:
 
   get("/users", { :controller => "users", :action => "index" })
@@ -8,6 +8,9 @@ Rails.application.routes.draw do
   get("/users/:username/liked_photos", { :controller => "users", :action => "liked_photos" })
   get("/users/:username/feed", { :controller => "users", :action => "feed" })
   get("/users/:username/discover", { :controller => "users", :action => "discover" })
+
+
+  
 
   # Routes for the Comment resource:
   

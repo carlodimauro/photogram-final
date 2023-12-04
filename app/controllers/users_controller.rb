@@ -1,4 +1,8 @@
 class UsersController < ApplicationController
+  skip_before_action(:authenticate_user!, { :only => [:index] })
+
+  
+  
   def index
     matching_users = User.all
 
@@ -11,7 +15,15 @@ class UsersController < ApplicationController
   def show
     the_username = params.fetch("username")
     @the_user = User.where({ :username => the_username }).first
-    render({ :template => "users/show" })
+
+    follow_request = FollowRequest.where(sender_id: current_user.id, recipient_id: @the_user.id).first
+
+    if follow_request.present? && follow_request.status == "accepted" 
+      render({ :template => "users/show" })
+    else
+      redirect_to("/", { :alert => "You're not authorized for that" })
+    end
+    
   end
 
 def liked_photos
