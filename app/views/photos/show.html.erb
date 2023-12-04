@@ -80,20 +80,62 @@
 
 <hr>
 
+<h2>Comments</h2>
 
-<div>
+<table>
+  <tr>
+    <th>Commenter</th>
+    <th>Comment</th>
+    <th>Posted</th>
+  </tr>
+
+  <% @the_photo.comments.each do |a_comment| %>
+
+    <tr>
+      <td>
+        <% un = User.where( :id => a_comment.author_id).first %>
+        <%= un.username%>
+      </td>
+
+      <td>
+        <%= a_comment.body%>
+      </td>
+
+      <td>
+        <%= time_ago_in_words(a_comment.created_at)%>
+      </td>
+    </tr>
+
+  <% end %>
+</table>
+
+<hr>
+
+<h3>Add a new comment</h3>
+
+<form action="/insert_comment" method="post">
+  <input type="hidden" value="785" name="query_photo_id">
+  
+  <label for="browser_comment">Comment</label>
+  <textarea id="browser_comment" name="query_body" placeholder="Enter a comment..."></textarea>
+
+  <button>Add comment</button>
+</form>
+
+
+<!--<div>
   <div>
     <h2>
       Edit photo
     </h2>
 
-    <form action="/modify_photo/<%= @the_photo.id %>"  method="post" >
+    <form action="/modify_photo/<%#= @the_photo.id %>"  method="post" >
       <div>
         <label for="caption_box">
           Caption
         </label>
 
-        <input type="text" id="caption_box" name="query_caption" value="<%= @the_photo.caption %>">
+        <input type="text" id="caption_box" name="query_caption" value="<%#= @the_photo.caption %>">
       </div>
 
       <div>
@@ -101,7 +143,7 @@
           Image
         </label>
 
-        <input type="text" id="image_box" name="query_image" value="<%= @the_photo.image %>">
+        <input type="text" id="image_box" name="query_image" value="<%#= @the_photo.image %>">
       </div>
 
       <div>
@@ -109,7 +151,7 @@
           Owner
         </label>
 
-        <input type="text" id="owner_id_box" name="query_owner_id" value="<%= @the_photo.owner_id %>">
+        <input type="text" id="owner_id_box" name="query_owner_id" value="<%#= @the_photo.owner_id %>">
       </div>
 
       <div>
@@ -117,7 +159,7 @@
           Location
         </label>
 
-        <input type="text" id="location_box" name="query_location" value="<%= @the_photo.location %>">
+        <input type="text" id="location_box" name="query_location" value="<%#= @the_photo.location %>">
       </div>
 
       <div>
@@ -125,7 +167,7 @@
           Likes count
         </label>
 
-        <input type="text" id="likes_count_box" name="query_likes_count" value="<%= @the_photo.likes_count %>">
+        <input type="text" id="likes_count_box" name="query_likes_count" value="<%#= @the_photo.likes_count %>">
       </div>
 
       <div>
@@ -133,7 +175,7 @@
           Comments count
         </label>
 
-        <input type="text" id="comments_count_box" name="query_comments_count" value="<%= @the_photo.comments_count %>">
+        <input type="text" id="comments_count_box" name="query_comments_count" value="<%#= @the_photo.comments_count %>">
       </div>
 
       <button>
@@ -144,3 +186,4 @@
 </div>
 
 <hr>
+-->
