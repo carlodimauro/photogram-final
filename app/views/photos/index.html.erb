@@ -10,19 +10,15 @@
 
 <% if current_user.present?%>
 
-    <form action="/insert_photo" method="post">
+    <form action="/insert_photo" method="post" class="form-horizontal" enctype="multipart/form-data">
       <div>
-        <label for="caption_box">
-          Caption
-        </label>
+        <label for="caption_box">Caption</label>
         <input type="text" id="caption_box" name="query_caption">
       </div>
 
       <div>
-        <label for="image_box">
-          Image
-        </label>
-        <input type="text" id="image_box" name="query_image">
+        <label for="image">Image</label>
+        <input type="file" id="image" name="image" class="form-control">
       </div>
 
       <input type="hidden" name="query_owner_id" value="<%= current_user.id %>">
@@ -71,12 +67,16 @@
         </th>
       </tr>
 
-      <% @list_of_photos.select { |a_photo| !a_photo.owner.private }.each do |filtered_photo| %>
+      <% @list_of_photos
+       .select { |a_photo| !a_photo.owner.private }
+       .sort_by(&:created_at)
+       .reverse
+       .each do |filtered_photo| %>
         <!-- Your code to display or work with each filtered photo -->
 
         <tr>
           <td>
-            <img src="<%=filtered_photo.image %>">
+            <img src="<%=filtered_photo.image %>" class="img-responsive">
           </td>
 
           <td>

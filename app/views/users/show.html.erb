@@ -116,7 +116,7 @@
       <th></th>
     </tr>
 
-    <% @the_user.own_photos.each do |own_post| %>
+    <% @the_user.own_photos.order(created_at: :desc).each do |own_post| %>
 
       <tr>
         <td>

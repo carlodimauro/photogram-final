@@ -64,7 +64,7 @@
     <th></th>
   </tr>
 
-<% @the_user.feed.each do |feed_photo| %>
+<% @the_user.feed.order(created_at: :desc).each do |feed_photo| %>
   
 
 

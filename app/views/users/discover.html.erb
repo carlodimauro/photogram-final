@@ -64,7 +64,7 @@
     <th></th>
   </tr>
 
-<% @the_user.activity.each do |discover_photo| %>
+<% @the_user.activity.order(created_at: :desc).each do |discover_photo| %>
   
 
 
