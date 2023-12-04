@@ -1,82 +1,103 @@
-<div>
-  <div>
-    <h1>
-      Photo #<%= @the_photo.id %> details
-    </h1>
+<h1>
+  Photo Details
+</h1>
 
-    <div>
-      <div>
-        <a href="/photos">
-          Go back
-        </a>
-      </div>
+<dl>
 
-      <div>
-        <a href="/delete_photo/<%= @the_photo.id %>">
-          Delete photo
-        </a>
-      </div>
-    </div>
+  <dt>
+    Image
+  </dt>
+  <dd>
+    <img src="<%=@the_photo.image %>">
+  </dd>
 
-    <dl>
-      <dt>
-        Caption
-      </dt>
-      <dd>
-        <%= @the_photo.caption %>
-      </dd>
+  <dt>
+    Caption
+  </dt>
+  <dd>
+    <%= @the_photo.caption %>
+  </dd>
 
-      <dt>
-        Image
-      </dt>
-      <dd>
-        <img src="<%=@the_photo.image %>">
-      </dd>
+  <dt>
+    Owner
+  </dt>
+  <dd>
+    <%= @the_photo.owner_id %>
+  </dd>
 
-      <dt>
-        Owner
-      </dt>
-      <dd>
-        <%= @the_photo.owner_id %>
-      </dd>
+  <dt>
+    Posted
+  </dt>
+  <dd>
+    <%= time_ago_in_words(@the_photo.created_at) %> ago
+  </dd>
 
-      <dt>
-        Location
-      </dt>
-      <dd>
-        <%= @the_photo.location %>
-      </dd>
+  <dt>
+    Likes count
+  </dt>
+  <dd>
+    <%= @the_photo.likes_count %>
+  </dd>
 
-      <dt>
-        Likes count
-      </dt>
-      <dd>
-        <%= @the_photo.likes_count %>
-      </dd>
+  <dt>
+    Comments count
+  </dt>
+  <dd>
+    <%= @the_photo.comments_count %>
+  </dd>
 
-      <dt>
-        Comments count
-      </dt>
-      <dd>
-        <%= @the_photo.comments_count %>
-      </dd>
+  <dt>
+    Fans
+  </dt>
+  <dd>
+    <% if @the_photo.fans.empty? %>
+      <!-- Handle the case when there are no fans -->
+    <% else %>
+      <%= @the_photo.fans.map(&:username)[0..-2].join(', ') %><%= @the_photo.fans.size > 1 ? ', and ' : '' %><%= @the_photo.fans.last.username %>
+    <% end %>
+  </dd>
 
-      <dt>
-        Created at
-      </dt>
-      <dd>
-        <%= time_ago_in_words(@the_photo.created_at) %> ago
-      </dd>
 
-      <dt>
-        Updated at
-      </dt>
-      <dd>
-        <%= time_ago_in_words(@the_photo.updated_at) %> ago
-      </dd>
-    </dl>
-  </div>
-</div>
+  <dt>
+    Add a fan
+  </dt>
+  <dd>
+   <form action="/insert_like" method="post">
+    <input type="hidden" name="query_photo_id" value=<%= @the_photo.id%>>
+    <input type="hidden" name="query_user_id" value=<%= current_user.id%>>
+      <button>Like</button>
+    </form>
+  </dd>
+
+  <% if current_user.id == @the_photo.owner_id%>
+    <dt>
+      Edit photo
+    </dt>
+    <dd>
+      <form action="/modify_photo/<%=@the_photo.id%>" method="post">
+        <label for="browser_image">Image URL</label>
+        <input id="browser_image" type="text" name="query_image" placeholder="Enter a URL for the image..." value="<%= @the_photo.image %>">
+
+        <label for="browser_caption">Caption</label>
+        <textarea id="browser_caption" name="query_caption" placeholder="Enter a caption for the photo..."><%= @the_photo.caption %></textarea>
+
+        <input type="hidden" name="query_owner_id" value="<%= current_user.id %>">
+        <input type="hidden" name="query_location" value="<%= @the_photo.location %>">
+        <input type="hidden" name="query_likes_count" value="<%= @the_photo.likes_count %>">
+        <input type="hidden" name="query_comments_count" value="<%= @the_photo.comments_count %>">
+        <button>Update photo</button>
+
+      </form>
+    </dd>
+
+    <dt>
+      Delete photo
+    </dt>
+    <dd>
+      <a href="/delete_photo/<%= @the_photo.id %>">Delete photo</a>
+    </dd>
+  <%end%>
+</dl>
 
 <hr>
 
@@ -114,14 +135,15 @@
 <h3>Add a new comment</h3>
 
 <form action="/insert_comment" method="post">
-  <input type="hidden" value="785" name="query_photo_id">
-  
+  <input type="hidden" value="<%= @the_photo.id%>" name="query_photo_id">
+
   <label for="browser_comment">Comment</label>
   <textarea id="browser_comment" name="query_body" placeholder="Enter a comment..."></textarea>
 
+  <input type="hidden" name="query_commenter_id" value="<%= current_user.id %>">
+
   <button>Add comment</button>
 </form>
-
 
 <!--<div>
   <div>

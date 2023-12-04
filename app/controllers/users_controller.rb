@@ -18,7 +18,7 @@ class UsersController < ApplicationController
 
     follow_request = FollowRequest.where(sender_id: current_user.id, recipient_id: @the_user.id).first
 
-    if follow_request.present? && follow_request.status == "accepted" 
+    if (follow_request.present? && follow_request.status == "accepted" ) || @the_user.id == current_user.id
       render({ :template => "users/show" })
     else
       redirect_to("/", { :alert => "You're not authorized for that" })
