@@ -9,92 +9,109 @@
     <%= @the_user.followers.count %>
 
     <div>
-      <!--<a href="/delete_follow_request/1968">Unfollow</a>-->
-    </div>
+      <% follow_request = FollowRequest.where(sender_id: current_user.id, recipient_id: @the_user.id).first %>
 
-  </dd>
+      <% if follow_request.present?%>
+        <a href="/delete_follow_request/<%=follow_request.id%>">Unfollow</a>
+      <%else%>
+        <<!--follow request doesnt exist - show button to request follow-->
+          <form action="/insert_follow_request" method="post">
+            <input type="hidden" name="query_recipient_id" value="<%= @the_user.id %>">
+            <input type="hidden" name="query_sender_id" value="<%= current_user.id %>">
+            <%if @the_user.private? %>
+              <input type="hidden" name="query_status" value="pending">
+            <%else%>
+              <input type="hidden" name="query_status" value="accepted">
+            <%end%>
 
-  <dt>Following</dt>
-  <dd> <%= @the_user.following.count %></dd>
-</dl>
+            <button>
+              Follow
+            </button>
+          </form>
+        </div>
 
-<hr>
+      </dd>
+    <%end%>
+    
+    <dt>Following</dt>
+    <dd> <%= @the_user.following.count %></dd>
+  </dl>
 
-<ul>
-  <li>
-    <a href="/users/<%= @the_user.username %>">Profile</a>
-  </li>
-  <li>
-    <a href="/users/<%= @the_user.username %>/liked_photos">Liked photos</a>
-  </li>
-  <li>
-    <a href="/users/<%= @the_user.username %>/feed">Feed</a>
-  </li>
-  <li>
-    <a href="/users/<%= @the_user.username %>/discover">Discover</a>
-  </li>
-</ul>
+  <hr>
 
-<hr>
+  <ul>
+    <li>
+      <a href="/users/<%= @the_user.username %>">Profile</a>
+    </li>
+    <li>
+      <a href="/users/<%= @the_user.username %>/liked_photos">Liked photos</a>
+    </li>
+    <li>
+      <a href="/users/<%= @the_user.username %>/feed">Feed</a>
+    </li>
+    <li>
+      <a href="/users/<%= @the_user.username %>/discover">Discover</a>
+    </li>
+  </ul>
 
-<h2>Own photos (<%= @the_user.own_photos.count %>)</h2>
+  <hr>
 
-<table border="1">
-  <tr>
-    <th>
-      Image
-    </th>
+  <h2>Own photos (<%= @the_user.own_photos.count %>)</h2>
 
-    <th>
-      Owner
-    </th>
+  <table border="1">
+    <tr>
+      <th>
+        Image
+      </th>
 
-    <th>
-      Caption
-    </th>
+      <th>
+        Owner
+      </th>
 
-    <th>
-      Posted
-    </th>
+      <th>
+        Caption
+      </th>
 
-    <th>
-      Likes
-    </th>
+      <th>
+        Posted
+      </th>
 
-    <th></th>
-  </tr>
+      <th>
+        Likes
+      </th>
 
-<% @the_user.own_photos.each do |own_post| %>
-  
+      <th></th>
+    </tr>
 
+    <% @the_user.own_photos.each do |own_post| %>
 
-  <tr>
-    <td>
-      
-      <img src="<%= own_post.image %>" class="img-responsive">
-    </td>
+      <tr>
+        <td>
 
-    <td>
-      <%= @the_user.username %>
-    </td>
+          <img src="<%= own_post.image %>" class="img-responsive">
+        </td>
 
-    <td>
-      <%= own_post.caption %>
-    </td>
+        <td>
+          <%= @the_user.username %>
+        </td>
 
-    <td>
-      <%= time_ago_in_words(own_post.created_at) %>
-    </td>
+        <td>
+          <%= own_post.caption %>
+        </td>
 
-    <td>
-      <%= own_post.likes_count %>
-    </td>
+        <td>
+          <%= time_ago_in_words(own_post.created_at) %>
+        </td>
 
-    <td>
-      <a href="/photos/<%=own_post.id%>">
-        Show details
-      </a>
-    </td>
-  </tr>
-<% end %>
-</table>
+        <td>
+          <%= own_post.likes_count %>
+        </td>
+
+        <td>
+          <a href="/photos/<%=own_post.id%>">
+            Show details
+          </a>
+        </td>
+      </tr>
+    <% end %>
+  </table>
