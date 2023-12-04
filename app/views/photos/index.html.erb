@@ -10,25 +10,25 @@
 
 <% if current_user.present?%>
 
-    <form action="/insert_photo" method="post" class="form-horizontal" enctype="multipart/form-data">
-      <div>
-        <label for="caption_box">Caption</label>
-        <input type="text" id="caption_box" name="query_caption">
-      </div>
+  <form action="/insert_photo" method="post" class="form-horizontal" enctype="multipart/form-data">
+    <div>
+      <label for="caption_box">Caption</label>
+      <input type="text" id="caption_box" name="query_caption">
+    </div>
 
-      <div>
-        <label for="image">Image</label>
-        <input type="file" id="image" name="image" class="form-control">
-      </div>
+    <div>
+      <label for="image">Image</label>
+      <input type="file" id="image" name="image" class="form-control">
+    </div>
 
-      <input type="hidden" name="query_owner_id" value="<%= current_user.id %>">
-      <input type="hidden" name="query_location" value="">
-      <input type="hidden" name="query_likes_count" value="0">
-      <input type="hidden" id="comments_count_box" name="query_comments_count" value="0">
-      </div>
+    <input type="hidden" name="query_owner_id" value="<%= current_user.id %>">
+    <input type="hidden" name="query_location" value="">
+    <input type="hidden" name="query_likes_count" value="0">
+    <input type="hidden" id="comments_count_box" name="query_comments_count" value="0">
+  </div>
 
-      <button>Add photo</button>
-    </form>
+  <button>Add photo</button>
+</form>
 
 <%end%>
 
@@ -39,13 +39,11 @@
       <tr>
         <th>
           Image
-        </th>        
+        </th>
 
         <th>
           Caption
         </th>
-
-
 
         <th>
           Owner
@@ -55,13 +53,9 @@
           Likes count
         </th>
 
-
-
         <th>
           Posted
         </th>
-
-
 
         <th>
         </th>
@@ -76,14 +70,17 @@
 
         <tr>
           <td>
-            <img src="<%=filtered_photo.image %>" class="img-responsive">
+            <% if filtered_photo.read_attribute(:image).start_with?('http') %>
+              <img src="<%= filtered_photo.read_attribute(:image) %>" class="img-responsive">
+            <% else %>
+              <img src="<%=filtered_photo.image %>" class="img-responsive">
+            <% end %>
+            
           </td>
 
           <td>
             <%= filtered_photo.caption %>
           </td>
-
-
 
           <td>
             <%= filtered_photo.owner.username %>
@@ -93,12 +90,9 @@
             <%= filtered_photo.likes_count %>
           </td>
 
-
-
           <td>
             <%= time_ago_in_words(filtered_photo.created_at) %> ago
           </td>
-
 
           <td>
             <a href="/photos/<%= filtered_photo.id %>">

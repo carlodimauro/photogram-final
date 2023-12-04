@@ -8,7 +8,13 @@
     Image
   </dt>
   <dd>
-    <img src="<%=@the_photo.image %>">
+
+<% if @the_photo.read_attribute(:image).start_with?('http') %>
+  <img src="<%= @the_photo.read_attribute(:image) %>" class="img-responsive">
+<% else %>
+  <img src="<%=@the_photo.image %>" class="img-responsive">
+<% end %>
+
   </dd>
 
   <dt>

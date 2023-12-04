@@ -70,8 +70,12 @@
 
   <tr>
     <td>
+       <% if feed_photo.read_attribute(:image).start_with?('http') %>
+          <img src="<%= feed_photo.read_attribute(:image) %>" class="img-responsive">
+        <% else %>
+          <img src="<%=feed_photo.image %>" class="img-responsive">
+        <% end %>
       
-      <img src="<%= feed_photo.image %>" class="img-responsive">
     </td>
 
     <td>

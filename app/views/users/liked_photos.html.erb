@@ -73,7 +73,11 @@
   <tr>
     <td>
       
-      <img src="<%= liked_p.image %>" class="img-responsive">
+       <% if liked_p.read_attribute(:image).start_with?('http') %>
+          <img src="<%= liked_p.read_attribute(:image) %>" class="img-responsive">
+        <% else %>
+          <img src="<%=liked_p.image %>" class="img-responsive">
+        <% end %>
     </td>
 
     <td>

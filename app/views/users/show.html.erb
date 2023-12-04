@@ -19,7 +19,7 @@
           <h4>Pending follow requests</h4>
 
           <% pending_reqs = FollowRequest.where(recipient_id: current_user.id, status: "pending")%>
-          
+
           <% pending_reqs.each do |request| %>
 
             <ul>
@@ -42,109 +42,113 @@
                   <button>Reject</button>
                 </form>
               </li>
-              </ul>
-            </div>
-          <% end %>
+            </ul>
+          </div>
+        <% end %>
 
-        <%else %>
-          <!--follow request doesnt exist - show button to request follow-->
-          <form action="/insert_follow_request" method="post">
-            <input type="hidden" name="query_recipient_id" value="<%= @the_user.id %>">
-            <input type="hidden" name="query_sender_id" value="<%= current_user.id %>">
-            <%if @the_user.private? %>
-              <input type="hidden" name="query_status" value="pending">
-            <%else%>
-              <input type="hidden" name="query_status" value="accepted">
-            <%end%>
+      <%else %>
+        <!--follow request doesnt exist - show button to request follow-->
+        <form action="/insert_follow_request" method="post">
+          <input type="hidden" name="query_recipient_id" value="<%= @the_user.id %>">
+          <input type="hidden" name="query_sender_id" value="<%= current_user.id %>">
+          <%if @the_user.private? %>
+            <input type="hidden" name="query_status" value="pending">
+          <%else%>
+            <input type="hidden" name="query_status" value="accepted">
+          <%end%>
 
-            <button>
-              Follow
-            </button>
-          </form>
-        </div>
+          <button>
+            Follow
+          </button>
+        </form>
+      </div>
 
-      </dd>
-    <%end%>
+    </dd>
+  <%end%>
 
-    <dt>Following</dt>
-    <dd> <%= @the_user.following.count %></dd>
-  </dl>
+  <dt>Following</dt>
+  <dd> <%= @the_user.following.count %></dd>
+</dl>
 
-  <hr>
+<hr>
 
-  <ul>
-    <li>
-      <a href="/users/<%= @the_user.username %>">Profile</a>
-    </li>
-    <li>
-      <a href="/users/<%= @the_user.username %>/liked_photos">Liked photos</a>
-    </li>
-    <li>
-      <a href="/users/<%= @the_user.username %>/feed">Feed</a>
-    </li>
-    <li>
-      <a href="/users/<%= @the_user.username %>/discover">Discover</a>
-    </li>
-  </ul>
+<ul>
+  <li>
+    <a href="/users/<%= @the_user.username %>">Profile</a>
+  </li>
+  <li>
+    <a href="/users/<%= @the_user.username %>/liked_photos">Liked photos</a>
+  </li>
+  <li>
+    <a href="/users/<%= @the_user.username %>/feed">Feed</a>
+  </li>
+  <li>
+    <a href="/users/<%= @the_user.username %>/discover">Discover</a>
+  </li>
+</ul>
 
-  <hr>
+<hr>
 
-  <h2>Own photos (<%= @the_user.own_photos.count %>)</h2>
+<h2>Own photos (<%= @the_user.own_photos.count %>)</h2>
 
-  <table border="1">
+<table border="1">
+  <tr>
+    <th>
+      Image
+    </th>
+
+    <th>
+      Owner
+    </th>
+
+    <th>
+      Caption
+    </th>
+
+    <th>
+      Posted
+    </th>
+
+    <th>
+      Likes
+    </th>
+
+    <th></th>
+  </tr>
+
+  <% @the_user.own_photos.order(created_at: :desc).each do |own_post| %>
+
     <tr>
-      <th>
-        Image
-      </th>
+      <td>
+        <% if own_post.read_attribute(:image).start_with?('http') %>
+          <img src="<%= own_post.read_attribute(:image) %>" class="img-responsive">
+        <% else %>
+          <img src="<%=own_post.image %>" class="img-responsive">
+        <% end %>
+        
+      </td>
 
-      <th>
-        Owner
-      </th>
+      <td>
+        <%= @the_user.username %>
+      </td>
 
-      <th>
-        Caption
-      </th>
+      <td>
+        <%= own_post.caption %>
+      </td>
 
-      <th>
-        Posted
-      </th>
+      <td>
+        <%= time_ago_in_words(own_post.created_at) %>
+      </td>
 
-      <th>
-        Likes
-      </th>
+      <td>
+        <%= own_post.likes_count %>
+      </td>
 
-      <th></th>
+      <td>
+        <a href="/photos/<%=own_post.id%>">
+          Show details
+        </a>
+      </td>
     </tr>
-
-    <% @the_user.own_photos.order(created_at: :desc).each do |own_post| %>
-
-      <tr>
-        <td>
-
-          <img src="<%= own_post.image %>" class="img-responsive">
-        </td>
-
-        <td>
-          <%= @the_user.username %>
-        </td>
-
-        <td>
-          <%= own_post.caption %>
-        </td>
-
-        <td>
-          <%= time_ago_in_words(own_post.created_at) %>
-        </td>
-
-        <td>
-          <%= own_post.likes_count %>
-        </td>
-
-        <td>
-          <a href="/photos/<%=own_post.id%>">
-            Show details
-          </a>
-        </td>
-      </tr>
-    <% end %>
-  </table>
+  <% end %>
+</table>
