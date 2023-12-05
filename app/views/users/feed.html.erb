@@ -64,41 +64,45 @@
     <th></th>
   </tr>
 
-<% @the_user.feed.order(created_at: :desc).each do |feed_photo| %>
-  
+  <% @the_user.feed.order(created_at: :desc).each do |feed_photo| %>
 
+    <% accepted_follower = FollowRequest.where(sender_id: current_user.id, recipient_id: feed_photo.owner_id).first%>
 
-  <tr>
-    <td>
-       <% if feed_photo.read_attribute(:image).start_with?('http') %>
-          <img src="<%= feed_photo.read_attribute(:image) %>" class="img-responsive">
-        <% else %>
-          <img src="<%=feed_photo.image %>" class="img-responsive">
-        <% end %>
-      
-    </td>
+    <% if accepted_follower.status == "accepted" %>
 
-    <td>
-      <%= feed_photo.owner_id %>
-    </td>
+      <tr>
+        <td>
+          <% if feed_photo.read_attribute(:image).start_with?('http') %>
+            <img src="<%= feed_photo.read_attribute(:image) %>" class="img-responsive">
+          <% else %>
+            <img src="<%=feed_photo.image %>" class="img-responsive">
+          <% end %>
 
-    <td>
-      <%= feed_photo.caption %>
-    </td>
+        </td>
 
-    <td>
-      <%= time_ago_in_words(feed_photo.created_at) %>
-    </td>
+        <td>
 
-    <td>
-      <%= feed_photo.likes_count %>
-    </td>
+          <%= feed_photo.owner.username %>
+        </td>
 
-    <td>
-      <a href="/photos/<%=feed_photo.id%>">
-        Show details
-      </a>
-    </td>
-  </tr>
-<% end %>
+        <td>
+          <%= feed_photo.caption %>
+        </td>
+
+        <td>
+          <%= time_ago_in_words(feed_photo.created_at) %>
+        </td>
+
+        <td>
+          <%= feed_photo.likes_count %>
+        </td>
+
+        <td>
+          <a href="/photos/<%=feed_photo.id%>">
+            Show details
+          </a>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
 </table>
