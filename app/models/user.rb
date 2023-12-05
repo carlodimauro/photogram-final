@@ -43,9 +43,15 @@ class User < ApplicationRecord
   has_many :own_photos, class_name: "Photo", foreign_key: "owner_id", dependent: :destroy
 
   ##Indirect Associations
-  has_many :following, through: :sent_follow_requests, source: :recipient
+  #has_many :following, through: :sent_follow_requests, source: :recipient
 
-  has_many :followers, through: :received_follow_requests, source: :sender
+  has_many :following, -> { where(follow_requests: { status: "accepted" }) },
+           through: :sent_follow_requests, source: :recipient
+
+  has_many :followers, -> { where(follow_requests: { status: "accepted" }) },
+           through: :received_follow_requests, source: :sender
+
+  #has_many :followers, through: :received_follow_requests, source: :sender
 
   has_many :liked_photos, through: :likes, source: :photo
 
