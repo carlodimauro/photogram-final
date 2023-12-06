@@ -20,18 +20,18 @@
 
 <hr>
 
-<ul>
-  <li>
-    <a href="/users/<%= @the_user.username %>">Profile</a>
+<ul class="nav nav-pills nav-fill">
+  <li class="nav-item">
+    <a class="nav-link" href="/users/<%= @the_user.username %>">Profile</a>
   </li>
-  <li>
-    <a href="/users/<%= @the_user.username %>/liked_photos">Liked photos</a>
+  <li class="nav-item">
+    <a  class="nav-link"  href="/users/<%= @the_user.username %>/liked_photos">Liked photos</a>
   </li>
-  <li>
-    <a href="/users/<%= @the_user.username %>/feed">Feed</a>
+  <li class="nav-item">
+    <a class="nav-link" href="/users/<%= @the_user.username %>/feed">Feed</a>
   </li>
-  <li>
-    <a href="/users/<%= @the_user.username %>/discover">Discover</a>
+  <li class="nav-item">
+    <a  class="nav-link active" aria-current="page" href="/users/<%= @the_user.username %>/discover">Discover</a>
   </li>
 </ul>
 
