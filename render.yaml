@@ -13,11 +13,11 @@ services:
           name: db
           property: connectionString
       - key: CLOUDINARY_API_KEY
-        generateValue: true
+        generateValue: false
       - key: CLOUDINARY_API_SECRET
-        generateValue: true
+        generateValue: false
       - key: CLOUDINARY_CLOUD_NAME
-        generateValue: true        
+        generateValue: false        
 databases: # this section provides some additional database configuration
   - name: db
     plan: free
