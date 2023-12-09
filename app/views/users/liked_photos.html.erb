@@ -35,11 +35,36 @@
   </li>
 </ul>
 
+
+
+
 <hr>
 
-
-
 <h2>Liked photos (<%= @the_user.liked_photos.count %>)</h2>
+<% @the_user.liked_photos.order(created_at: :desc).each do |liked_p| %>
+
+  <div class="container col-md-6 offset-md-3 text-center mb-3">
+
+    <div class="card ">
+
+      <% if liked_p.read_attribute(:image).start_with?('http') %>
+        <img src="<%= liked_p.read_attribute(:image) %>" class="card-img-top img-fluid" alt="...">
+      <% else %>
+        <img src="<%=liked_p.image %>" class="card-img-top img-fluid" alt="...">
+      <% end %>
+      <div class="card-body">
+        <h5 class="card-title"><%= @the_user.username %></h5>
+        <p class="card-text"><%= liked_p.caption %></p>
+        <p class="card-text"><small class="text-muted"><%= time_ago_in_words(liked_p.created_at) %> ago</small></p>
+        <a href="/photos/<%=liked_p.id%>" class="btn btn-primary">Show details</a>
+      </div>
+    </div>
+
+  </div>
+
+<%end%>
+
+<!--<h2>Liked photos (<%#= @the_user.liked_photos.count %>)</h2>
 
 <table border="1">
   <tr>
@@ -66,41 +91,41 @@
     <th></th>
   </tr>
 
-<% @the_user.liked_photos.order(created_at: :desc).each do |liked_p| %>
-  
 
 
+<%# @the_user.liked_photos.order(created_at: :desc).each do |liked_p| %>-->
+<!--  
   <tr>
     <td>
       
-       <% if liked_p.read_attribute(:image).start_with?('http') %>
-          <img src="<%= liked_p.read_attribute(:image) %>" class="img-responsive">
-        <% else %>
-          <img src="<%=liked_p.image %>" class="img-responsive">
-        <% end %>
-    </td>
+       <%# if liked_p.read_attribute(:image).start_with?('http') %>-->
+<!--          <img src="<%#= liked_p.read_attribute(:image) %>" class="img-responsive">-->
+<%# else %>
+<!--          <img src="<%#=liked_p.image %>" class="img-responsive">-->
+<%# end %>
+<!--    </td>
 
     <td>
-      <%= liked_p.owner_id %>
-    </td>
+      <%#= liked_p.owner_id %>-->
+<!--    </td>
 
     <td>
-      <%= liked_p.caption %>
-    </td>
+      <%#= liked_p.caption %>-->
+<!--    </td>
 
     <td>
-      <%= time_ago_in_words(liked_p.created_at) %>
-    </td>
+      <%#= time_ago_in_words(liked_p.created_at) %>-->
+<!--    </td>
 
     <td>
-      <%= liked_p.likes_count %>
-    </td>
+      <%#= liked_p.likes_count %>-->
+<!--    </td>
 
     <td>
-      <a href="/photos/<%=liked_p.id%>">
+      <a href="/photos/<%#=liked_p.id%>">
         Show details
       </a>
     </td>
   </tr>
-<% end %>
-</table>
+<%# end %>-->
+<!--</table>-->

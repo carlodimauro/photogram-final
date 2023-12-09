@@ -16,15 +16,45 @@
       <% elsif current_user.id =@the_user.id%>
 
         <div>
+
           <h4>Pending follow requests</h4>
 
           <% pending_reqs = FollowRequest.where(recipient_id: current_user.id, status: "pending")%>
 
-          <div class="container">
+          <div class="row">
             <% pending_reqs.each do |request| %>
-              <div class="row justify-content-center mb-3">
+              <div class="col-sm-3 mb-3">
+                <div class="card border-secondary mb-3">
+                  <div class="card-header">Follow Request</div>
+                  <div class="card-body text-secondary">
+
+                    <p class="card-text"><%= request.sender.username %></p>
+
+                    <div class="d-flex">
+                      <form action="/modify_follow_request/<%= request.id %>" method="post" class="dropdown-item">
+                        <input name="query_sender_id" value="<%= request.sender_id %>" type="hidden">
+                        <input name="query_recipient_id" value="<%= request.recipient_id %>" type="hidden">
+                        <button class="btn btn-primary" type="submit" name="query_status" value="accepted">Accept</button>
+                      </form>
+
+                      <form action="/modify_follow_request/<%= request.id %>" method="post" class="dropdown-item">
+                        <input name="query_sender_id" value="<%= request.sender_id %>" type="hidden">
+                        <input name="query_recipient_id" value="<%= request.recipient_id %>" type="hidden">
+                        <button class="btn btn-warning" type="submit" name="query_status" value="rejected">Reject</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            <% end %>
+          </div>
+
+          <!--          <div class="container">-->
+          <%# pending_reqs.each do |request| %>
+            <!--              <div class="row justify-content-center mb-3">
                 <div class="col-md-auto">
-                  <div><%= request.sender.username %></div>
+                  <div><%#= request.sender.username %></div>
                 </div>
 
                 <div class="col-md-auto">
@@ -34,16 +64,16 @@
                     </button>
 
                     <ul class="dropdown-menu">
-                      <form action="/modify_follow_request/<%= request.id %>" method="post" class="dropdown-item">
-                        <input name="query_sender_id" value="<%= request.sender_id %>" type="hidden">
-                        <input name="query_recipient_id" value="<%= request.recipient_id %>" type="hidden">
+                      <form action="/modify_follow_request/<%#= request.id %>" method="post" class="dropdown-item">
+                        <input name="query_sender_id" value="<%#= request.sender_id %>" type="hidden">
+                        <input name="query_recipient_id" value="<%#= request.recipient_id %>" type="hidden">
 
                         <button type="submit" class="btn btn-link" name="query_status" value="accepted">Accept</button>
                       </form>
 
-                      <form action="/modify_follow_request/<%= request.id %>" method="post" class="dropdown-item">
-                        <input name="query_sender_id" value="<%= request.sender_id %>" type="hidden">
-                        <input name="query_recipient_id" value="<%= request.recipient_id %>" type="hidden">
+                      <form action="/modify_follow_request/<%#= request.id %>" method="post" class="dropdown-item">
+                        <input name="query_sender_id" value="<%#= request.sender_id %>" type="hidden">
+                        <input name="query_recipient_id" value="<%#= request.recipient_id %>" type="hidden">
 
                         <button type="submit" class="btn btn-link" name="query_status" value="rejected">Reject</button>
                       </form>
@@ -51,82 +81,76 @@
                   </div>
                 </div>
               </div>
-            <% end %>
+            <%# end %>-->
+            <!--          </div>-->
+
+          <%else %>
+            <!--follow request doesnt exist - show button to request follow-->
+            <form action="/insert_follow_request" method="post">
+              <input type="hidden" name="query_recipient_id" value="<%= @the_user.id %>">
+              <input type="hidden" name="query_sender_id" value="<%= current_user.id %>">
+              <%if @the_user.private? %>
+                <input type="hidden" name="query_status" value="pending">
+              <%else%>
+                <input type="hidden" name="query_status" value="accepted">
+              <%end%>
+
+              <button>
+                Follow
+              </button>
+            </form>
           </div>
 
-        <%else %>
-          <!--follow request doesnt exist - show button to request follow-->
-          <form action="/insert_follow_request" method="post">
-            <input type="hidden" name="query_recipient_id" value="<%= @the_user.id %>">
-            <input type="hidden" name="query_sender_id" value="<%= current_user.id %>">
-            <%if @the_user.private? %>
-              <input type="hidden" name="query_status" value="pending">
-            <%else%>
-              <input type="hidden" name="query_status" value="accepted">
-            <%end%>
+        </dd>
+      <%end%>
 
-            <button>
-              Follow
-            </button>
-          </form>
-        </div>
+      <dt>Following</dt>
+      <dd> <%= @the_user.following.count %></dd>
+    </dl>
 
-      </dd>
-    <%end%>
+    <hr>
 
-    <dt>Following</dt>
-    <dd> <%= @the_user.following.count %></dd>
-  </dl>
+    <ul class="nav nav-pills nav-fill">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/users/<%= @the_user.username %>">Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/users/<%= @the_user.username %>/liked_photos">Liked photos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/users/<%= @the_user.username %>/feed">Feed</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/users/<%= @the_user.username %>/discover">Discover</a>
+      </li>
+    </ul>
 
-  <hr>
+    <hr>
 
+    <h2>Own photos (<%= @the_user.own_photos.count %>)</h2>
+    <% @the_user.own_photos.order(created_at: :desc).each do |own_post| %>
+      
+      <div class="container col-md-6 offset-md-3 text-center mb-3">
 
+        
+        <div class="card ">
 
-<ul class="nav nav-pills nav-fill">
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="/users/<%= @the_user.username %>">Profile</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/users/<%= @the_user.username %>/liked_photos">Liked photos</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/users/<%= @the_user.username %>/feed">Feed</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/users/<%= @the_user.username %>/discover">Discover</a>
-  </li>
-</ul>
-
-
-
-  <hr>
-
-  <h2>Own photos (<%= @the_user.own_photos.count %>)</h2>
-  <% @the_user.own_photos.order(created_at: :desc).each do |own_post| %>
-    <div class="col-md-12">
-      <div class="container text-center">
-
-        <div class="row">
-
-          <div class="col-md-4 mb-4 mx-auto">
-            <div class="card">
-
-              <% if own_post.read_attribute(:image).start_with?('http') %>
-                <img src="<%= own_post.read_attribute(:image) %>" class="card-img-top img-fluid" alt="...">
-              <% else %>
-                <img src="<%=own_post.image %>" class="card-img-top img-fluid" alt="...">
-              <% end %>
-              <div class="card-body">
-                <h5 class="card-title"><%= @the_user.username %></h5>
-                <p class="card-text"><%= own_post.caption %></p>
-                <p class="card-text"><small class="text-muted"><%= time_ago_in_words(own_post.created_at) %> ago</small></p>
-                <a href="/photos/<%=own_post.id%>" class="btn btn-primary">Show details</a>
-              </div>
-            </div>
+          <% if own_post.read_attribute(:image).start_with?('http') %>
+            <img src="<%= own_post.read_attribute(:image) %>" class="card-img-top img-fluid" alt="...">
+          <% else %>
+            <img src="<%=own_post.image %>" class="card-img-top img-fluid" alt="...">
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title"><%= @the_user.username %></h5>
+            <p class="card-text"><%= own_post.caption %></p>
+            <p class="card-text"><small class="text-muted"><%= time_ago_in_words(own_post.created_at) %> ago</small></p>
+            <a href="/photos/<%=own_post.id%>" class="btn btn-primary">Show details</a>
           </div>
         </div>
+        
       </div>
-    </div>
+    
+    
   <% end %>
 
   <!--<table border="1">
