@@ -16,8 +16,7 @@ services:
         generateValue: false
       - key: CLOUDINARY_API_SECRET
         generateValue: false
-      - key: CLOUDINARY_CLOUD_NAME
-        generateValue: false        
+      
 databases: # this section provides some additional database configuration
   - name: db
     plan: free
