@@ -10,99 +10,61 @@
 
 <% if current_user.present?%>
 
-  <form action="/insert_photo" method="post" class="form-horizontal" enctype="multipart/form-data">
-    <div>
-      <label for="caption_box">Caption</label>
-      <input type="text" id="caption_box" name="query_caption">
-    </div>
+  <div class="container col-md-6 offset-md-3 text-center mb-3">
 
-    <div>
-      <label for="image">Image</label>
-      <input type="file" id="image" name="image" class="form-control">
-    </div>
+    <form action="/insert_photo" method="post" class="form-horizontal" enctype="multipart/form-data">
 
-    <input type="hidden" name="query_owner_id" value="<%= current_user.id %>">
-    <input type="hidden" name="query_location" value="">
-    <input type="hidden" name="query_likes_count" value="0">
-    <input type="hidden" id="comments_count_box" name="query_comments_count" value="0">
+      <div class="mb-3">
+        <label for="image" class="form-label">Add a New Image</label>
+        <input type="file" id="image" name="image" class="form-control">
+      </div>
+
+      <input type="hidden" name="query_owner_id" value="<%= current_user.id %>">
+      <input type="hidden" name="query_location" value="">
+      <input type="hidden" name="query_likes_count" value="0">
+      <input type="hidden" id="comments_count_box" name="query_comments_count" value="0">
+
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Caption</span>
+
+        <input type="text" class="form-control" name="query_caption" placeholder="Caption" aria-label="Caption" aria-describedby="basic-addon1">
+      </div>
+
+      <button type="submit" class="btn btn-danger">Add photo</button>
+    </form>
+    <!--
+      <div>
+        <label for="caption_box">Caption</label>
+        <input type="text" id="caption_box" name="query_caption">
+      </div>-->
   </div>
-
-  <button>Add photo</button>
-</form>
-
 <%end%>
 
 <hr>
-<div>
-  <div>
-    <table border="1">
-      <tr>
-        <th>
-          Image
-        </th>
 
-        <th>
-          Caption
-        </th>
-
-        <th>
-          Owner
-        </th>
-
-        <th>
-          Likes count
-        </th>
-
-        <th>
-          Posted
-        </th>
-
-        <th>
-        </th>
-      </tr>
-
-      <% @list_of_photos
+<% @list_of_photos
        .select { |a_photo| !a_photo.owner.private }
        .sort_by(&:created_at)
        .reverse
        .each do |filtered_photo| %>
-        <!-- Your code to display or work with each filtered photo -->
+  <!-- Your code to display or work with each filtered photo -->
 
-        <tr>
-          <td>
-            <% if filtered_photo.read_attribute(:image).start_with?('http') %>
-              <img src="<%= filtered_photo.read_attribute(:image) %>" class="img-responsive">
-            <% else %>
-              <img src="<%=filtered_photo.image %>" class="img-responsive">
-            <% end %>
-            
-          </td>
+  <div class="container col-md-6 offset-md-3 text-center mb-3">
 
-          <td>
-            <%= filtered_photo.caption %>
-          </td>
+    <div class="card ">
 
-          <td>
-            <%= filtered_photo.owner.username %>
-          </td>
-
-          <td>
-            <%= filtered_photo.likes_count %>
-          </td>
-
-          <td>
-            <%= time_ago_in_words(filtered_photo.created_at) %> ago
-          </td>
-
-          <td>
-            <a href="/photos/<%= filtered_photo.id %>">
-              Show details
-            </a>
-          </td>
-        </tr>
+      <% if filtered_photo.read_attribute(:image).start_with?('http') %>
+        <img src="<%= filtered_photo.read_attribute(:image) %>" class="card-img-top img-fluid" alt="...">
+      <% else %>
+        <img src="<%=filtered_photo.image %>" class="card-img-top img-fluid" alt="...">
       <% end %>
-    </table>
-  </div>
-</div>
+      <div class="card-body">
+        <h5 class="card-title"><%= filtered_photo.owner.username %></h5>
+        <p class="card-text"><%= filtered_photo.caption %></p>
+        <p class="card-text"><small class="text-muted"><%= time_ago_in_words(filtered_photo.created_at) %> ago</small></p>
+        <a href="/photos/<%=filtered_photo.id%>" class="btn btn-primary">Show details</a>
+      </div>
+    </div>
 
-<hr>
+  </div>
+<%end%>
