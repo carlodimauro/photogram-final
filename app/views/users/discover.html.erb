@@ -39,65 +39,29 @@
 
 <h2>Discover (<%= @the_user.activity.count %>)</h2>
 
-<table border="1">
-  <tr>
-    <th>
-      Image
-    </th>
-
-    <th>
-      Owner
-    </th>
-
-    <th>
-      Caption
-    </th>
-
-    <th>
-      Posted
-    </th>
-
-    <th>
-      Likes
-    </th>
-
-    <th></th>
-  </tr>
 
   <% @the_user.activity.order(created_at: :desc).each do |discover_photo| %>
 
-    <tr>
-      <td>
 
-        <% if discover_photo.read_attribute(:image).start_with?('http') %>
-          <img src="<%= discover_photo.read_attribute(:image) %>" class="img-responsive">
-        <% else %>
-          <img src="<%=discover_photo.image %>" class="img-responsive">
-        <% end %>
+      <div class="container col-md-6 offset-md-3 text-center mb-3">
 
-      </td>
+        
+        <div class="card ">
 
-      <td>
-        <%= discover_photo.owner_id %>
-      </td>
+          <% if discover_photo.read_attribute(:image).start_with?('http') %>
+            <img src="<%= discover_photo.read_attribute(:image) %>" class="card-img-top img-fluid" alt="...">
+          <% else %>
+            <img src="<%=discover_photo.image %>" class="card-img-top img-fluid" alt="...">
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title"><%= @the_user.username %></h5>
+            <p class="card-text"><%= discover_photo.caption %></p>
+            <p class="card-text"><small class="text-muted"><%= time_ago_in_words(discover_photo.created_at) %> ago</small></p>
+            <a href="/photos/<%=discover_photo.id%>" class="btn btn-primary">Show details</a>
+          </div>
+        </div>
+        
+      </div>
 
-      <td>
-        <%= discover_photo.caption %>
-      </td>
-
-      <td>
-        <%= time_ago_in_words(discover_photo.created_at) %>
-      </td>
-
-      <td>
-        <%= discover_photo.likes_count %>
-      </td>
-
-      <td>
-        <a href="/photos/<%=discover_photo.id%>">
-          Show details
-        </a>
-      </td>
-    </tr>
+    
   <% end %>
-</table>
